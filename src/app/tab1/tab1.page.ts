@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import { IFilme } from '../models/IFilme.model';
+import { DatamodelService } from '../services/datamodel.service';
 
 @Component({
   selector: 'app-tab1',
@@ -13,24 +15,35 @@ export class Tab1Page {
   title = 'Streaming App';
   videoList: IFilme[] = [
     {
-    name!: 'Venom: Tempo de Carnificina (2021)',
-    launchDate!: '07/10/2021',
+    name: 'Venom: Tempo de Carnificina (2021)',
+    launchDate: '07/10/2021',
     duration: '1h 37m',
     rating: 74,
     image: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/kz7xJLowO4x0BpcB1IJb9uIXgrq.jpg',
-    genre: ['Ficção científica','Ação']
+    genre: ['Ficção científica','Ação'],
+    page: '/venom'
     },
     {
-      name!: 'A Perseguição (2011)',
+      name: 'A Perseguição (2011)',
       launchDate: '20/04/2012',
       duration: '1h 57m',
       rating: 66,
       image: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/a0Vt3wx8ciKmPt4iXPx9sH4HBVU.jpg',
-      genre: ['Drama','Ação','Aventura']
+      genre: ['Drama','Ação','Aventura'],
+      page: '/thechase'
       }
   ];
 
-  constructor(public alertController: AlertController, public toastController: ToastController) {}
+  constructor(
+    public alertController: AlertController,
+    public toastController: ToastController,
+    public datamodelService: DatamodelService,
+    public route: Router) {}
+
+  showFilm(film: IFilme) {
+    this.datamodelService.putData('filme',film);
+    this.route.navigateByUrl('/dados-filme');
+  }
 
   async showAlertFav() {
     const alert = await this.alertController.create({

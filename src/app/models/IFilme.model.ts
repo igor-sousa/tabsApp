@@ -5,4 +5,5 @@ export interface IFilme {
     rating: number;
     image: string;
     genre: string[];
+    page?: string;
 }
