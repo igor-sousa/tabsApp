@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
+import { IListaFilmes } from '../models/APIFilme.model';
 import { IFilme } from '../models/IFilme.model';
 import { DatamodelService } from '../services/datamodel.service';
+import { FilmeService } from '../services/filme.service';
 
 @Component({
   selector: 'app-tab1',
@@ -12,7 +14,8 @@ import { DatamodelService } from '../services/datamodel.service';
 })
 export class Tab1Page {
 
-  title = 'Streaming App';
+  title = 'Filmes';
+  listMovies: IListaFilmes;
   videoList: IFilme[] = [
     {
     name: 'Venom: Tempo de Carnificina (2021)',
@@ -38,11 +41,24 @@ export class Tab1Page {
     public alertController: AlertController,
     public toastController: ToastController,
     public datamodelService: DatamodelService,
+    public filmeService: FilmeService,
     public route: Router) {}
 
   showFilm(film: IFilme) {
     this.datamodelService.putData('filme',film);
     this.route.navigateByUrl('/dados-filme');
+  }
+
+  findMovie(evento: any) {
+    console.log(evento.target.value);
+    const find = evento.target.value;
+
+    if(find && find.trim() !== '') {
+      this.filmeService.findMovie(find).subscribe(data => {
+        console.log(data);
+        this.listMovies = data;
+      });
+    }
   }
 
   async showAlertFav() {
