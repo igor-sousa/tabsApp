@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
-import { IListaFilmes } from '../models/APIFilme.model';
+import { stringify } from 'querystring';
+import { APIFilme, IListaFilmes } from '../models/APIFilme.model';
 import { IFilme } from '../models/IFilme.model';
 import { DatamodelService } from '../services/datamodel.service';
 import { FilmeService } from '../services/filme.service';
@@ -15,6 +16,7 @@ import { FilmeService } from '../services/filme.service';
 export class Tab1Page {
 
   title = 'Filmes';
+  colorChip = 'success';
   listMovies: IListaFilmes;
   videoList: IFilme[] = [
     {
@@ -44,7 +46,7 @@ export class Tab1Page {
     public filmeService: FilmeService,
     public route: Router) {}
 
-  showFilm(film: IFilme) {
+  showFilm(film: APIFilme) {
     this.datamodelService.putData('filme',film);
     this.route.navigateByUrl('/dados-filme');
   }
@@ -91,6 +93,18 @@ export class Tab1Page {
       color: 'success'
     });
     toast.present();
+  }
+
+  setChipColor(voteAvg: number): void {
+
+    if (voteAvg < 6) {
+      this.colorChip = 'danger';
+    }
+    else {
+      if (voteAvg < 8) {
+        this.colorChip = 'warning';
+      }
+    }
   }
 
 }
