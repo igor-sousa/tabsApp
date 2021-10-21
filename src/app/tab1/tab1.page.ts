@@ -1,23 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import { stringify } from 'querystring';
 import { APIFilme, IListaFilmes } from '../models/APIFilme.model';
 import { IFilme } from '../models/IFilme.model';
+import { IGenero } from '../models/IGenero.model';
 import { DatamodelService } from '../services/datamodel.service';
 import { FilmeService } from '../services/filme.service';
+import { GenreService } from '../services/genre.service';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit {
 
   title = 'Filmes';
   colorChip = 'success';
   listMovies: IListaFilmes;
+  genres: string[] = [];
   videoList: IFilme[] = [
     {
     name: 'Venom: Tempo de Carnificina (2021)',
@@ -44,6 +47,7 @@ export class Tab1Page {
     public toastController: ToastController,
     public datamodelService: DatamodelService,
     public filmeService: FilmeService,
+    public genreService: GenreService,
     public route: Router) {}
 
   showFilm(film: APIFilme) {
@@ -105,6 +109,15 @@ export class Tab1Page {
         this.colorChip = 'warning';
       }
     }
+  }
+
+  ngOnInit() {
+    this.genreService.fetchGenre().subscribe(data => {
+      console.log('Generos: ', data.genres);
+      data.genres.forEach(genero => {
+        this.genres[genero.id] = genero.name;
+      });
+    });
   }
 
 }
