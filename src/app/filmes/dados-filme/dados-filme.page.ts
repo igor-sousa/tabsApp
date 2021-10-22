@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IFilme } from 'src/app/models/IFilme.model';
+import { APIFilme } from 'src/app/models/APIFilme.model';
 import { DatamodelService } from 'src/app/services/datamodel.service';
 
 @Component({
@@ -9,7 +9,9 @@ import { DatamodelService } from 'src/app/services/datamodel.service';
 })
 export class DadosFilmePage implements OnInit {
 
-  filme: IFilme;
+  filme: APIFilme;
+
+  genres: string[] = [];
 
   constructor(
     public datamodelService: DatamodelService
@@ -17,6 +19,7 @@ export class DadosFilmePage implements OnInit {
 
   ngOnInit() {
     this.filme = this.datamodelService.getData('filme');
+    this.genres = this.datamodelService.getData('genres');
     console.log('Filme enviado',this.filme);
   }
 
